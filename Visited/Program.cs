@@ -19,9 +19,9 @@ namespace Trie
         {
             var trie = new Trie();
 
-            Urls.ForEach(url => Console.WriteLine($"Created: {trie.CheckCreate(url)} - {url}"));
+            Urls.ForEach(url => Console.WriteLine($"Length:{url.Length} \t Created: {trie.CheckCreate(url)} \t {url}"));
 
-            Urls.ForEach(url => Console.WriteLine($"Created: {trie.CheckCreate(url)} - {url}"));
+            Urls.ForEach(url => Console.WriteLine($"Length:{url.Length} \t Created: {trie.CheckCreate(url)} \t {url}"));
 
             Console.ReadKey();
         }
