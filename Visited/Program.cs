@@ -1,29 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Trie
 {
     class Program
     {
-        private static readonly List<string> Urls = new List<string>()
-        {
-            "https://www.google.com",
-            "https://www.google.com/gmail",
-            "https://www.microsoft.com",
-            "https://www.microsoft.com/products",
-            "https://www.microsoft.com/products/office365",
-            "https://www.microsoft.com/products/visualstudio"
-        };
-
         static void Main(string[] args)
         {
+            const int numberOfUrls = 10;
+
             var trie = new Trie();
 
-            Urls.ForEach(url => Console.WriteLine($"Length:{url.Length} \t Created: {trie.CheckCreate(url)} \t {url}"));
+            var urls = Generator.GenerateRandomUrls(numberOfUrls, "http://www.", ".com")
+                .Union(Generator.GenerateRandomUrls(numberOfUrls, "https://www", ".com")
+                .Union(Generator.GenerateRandomUrls(numberOfUrls, "https://www2.", ".com")));
 
-            Urls.ForEach(url => Console.WriteLine($"Length:{url.Length} \t Created: {trie.CheckCreate(url)} \t {url}"));
+            Crawl(trie, urls.SelectMany(u => Generator.GenerateRandomUrls(numberOfUrls * 2, $"{u}/", string.Empty)));
 
             Console.ReadKey();
+        }
+
+        private static void Crawl(Trie trie, IEnumerable<string> urls)
+        {
+            foreach (var url in urls)
+            {
+                var allocated = trie.CheckCreate(url);
+
+                var savings = 1 - ((double)allocated / url.Length);
+
+                Console.WriteLine($"Len:{url.Length:####} \tAlloc: {allocated:####} \tSavings: {savings:P} \t{url}");
+            }
         }
 
         private class TrieNode
@@ -34,9 +41,9 @@ namespace Trie
                 => _childNodes.ContainsKey(ch);
 
             public void AddChildNode(char ch)
-                => _childNodes.Add(ch, new TrieNode());
+                => _childNodes.Add(ch, new Program.TrieNode());
 
-            public TrieNode GetChildNode(char ch)
+            public Program.TrieNode GetChildNode(char ch)
                 => _childNodes.TryGetValue(ch, out var child) ? child : null;
         }
 
