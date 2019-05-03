@@ -27,7 +27,7 @@ namespace Trie
             {
                 var allocated = trie.CheckCreate(url);
 
-                var savings = 1 - ((double)allocated / url.Length);
+                var savings = 1 - (double)allocated / url.Length;
 
                 Console.WriteLine($"Len:{url.Length:####} \tAlloc: {allocated:####} \tSavings: {savings:P} \t{url}");
             }
@@ -41,9 +41,9 @@ namespace Trie
                 => _childNodes.ContainsKey(ch);
 
             public void AddChildNode(char ch)
-                => _childNodes.Add(ch, new Program.TrieNode());
+                => _childNodes.Add(ch, new TrieNode());
 
-            public Program.TrieNode GetChildNode(char ch)
+            public TrieNode GetChildNode(char ch)
                 => _childNodes.TryGetValue(ch, out var child) ? child : null;
         }
 
